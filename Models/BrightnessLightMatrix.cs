@@ -4,22 +4,21 @@ using System.Text;
 
 namespace AOC2015.Models
 {
-    public class LightsMatrix
+    public class BrightnessLightMatrix
     {
 
-        private bool[,] _lightMatrix;
+        private int[,] _lightMatrix;
 
         private int _numOfRows;
         private int _numOfColumns;
 
-        public LightsMatrix(int rows = 1000, int columns = 1000)
+        public BrightnessLightMatrix(int rows = 1000, int columns = 1000)
         {
-            _lightMatrix = new bool[rows, columns];
+            _lightMatrix = new int[rows, columns];
 
             _numOfRows = rows;
             _numOfColumns = columns;
         }
-
 
         public void ExecuteInstruction(LightInstruction instruction)
         {
@@ -30,36 +29,35 @@ namespace AOC2015.Models
                 {
                     if (instruction.Command == LightInstructionCommand.TurnOn)
                     {
-                        _lightMatrix[i, j] = true;
-
-                    } else if (instruction.Command == LightInstructionCommand.TurnOff)
+                        _lightMatrix[i, j]++;
+                    }
+                    else if (instruction.Command == LightInstructionCommand.TurnOff)
                     {
-                        _lightMatrix[i, j] = false;
-
-                    }  else //Toggle
+                        if (_lightMatrix[i, j] > 0)
+                        {
+                            _lightMatrix[i, j]--;
+                        }
+                    }
+                    else //Toggle
                     {
-                        _lightMatrix[i, j] = !_lightMatrix[i, j];
+                        _lightMatrix[i, j] += 2;
                     }
                 }
             }
         }
 
-        public int GetNumOfActiveLights()
+
+        public int GetTotalBrightness()
         {
-
-            int numOfActiveLights = 0;
-
+            int brightnessSum = 0;
             for (int i = 0; i < _numOfRows; i++)
             {
                 for (int j = 0; j < _numOfColumns; j++)
                 {
-                    if (_lightMatrix[i,j])
-                    {
-                        numOfActiveLights++;
-                    }
+                   brightnessSum = brightnessSum + _lightMatrix[i,j];
                 }
             }
-            return numOfActiveLights;
+            return brightnessSum;
         }
     }
 }

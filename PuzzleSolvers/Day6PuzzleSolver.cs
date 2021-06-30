@@ -23,7 +23,15 @@ namespace AOC2015.PuzzleSolvers
 
         public string SolvePuzzlePart2()
         {
-            return null;
+            var lightsMatrix = new BrightnessLightMatrix();
+
+            List<LightInstruction> instructions = GetLightInstructionInput();
+
+            instructions.ForEach(instruction => lightsMatrix.ExecuteInstruction(instruction));
+
+            var totalBrightness = lightsMatrix.GetTotalBrightness();
+            
+            return totalBrightness.ToString();
         }
 
 
