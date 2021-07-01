@@ -15,6 +15,11 @@ namespace AOC2015.Models
         }
 
 
+        public void ExecuteInstruction(WireCircuitInstruction instruction)
+        {
+
+        }
+
 
         public ushort GetWireSignal(string wireId)
         {

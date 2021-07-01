@@ -10,7 +10,16 @@ namespace AOC2015.PuzzleSolvers
     {
         public string SolvePuzzlePart1()
         {
-            throw new NotImplementedException();
+            List<WireCircuitInstruction> instructions = GetWireCircuitInstructionInput();
+
+            var wireCircuit = new WireCircuit();
+
+            foreach (WireCircuitInstruction instruction in instructions)
+            {
+                wireCircuit.ExecuteInstruction(instruction);
+            }
+
+            return wireCircuit.GetWireSignal("a").ToString();
         }
 
         public string SolvePuzzlePart2()
@@ -25,7 +34,12 @@ namespace AOC2015.PuzzleSolvers
             var fullInputFilePath = Path.GetFullPath("InputFiles/day7.txt");
             string[] inputStrings = File.ReadAllLines(fullInputFilePath);
 
-
+            for (int i = 0; i < inputStrings.Length; i++)
+            {
+                var builder = new WireCircuitInstructionBuilder();
+                WireCircuitInstruction instruction = builder.BuildInstruction(inputStrings[i]);
+                instructions.Add(instruction);
+            }
 
             return instructions;
         }

@@ -2,10 +2,12 @@
 {
     public enum WireCircuitOperator
     {
+        UNDEFINED,
         AND,
         OR,
         NOT,
         RSHIFT,
-        LSHIFT
+        LSHIFT,
+        ASSIGNMENT
     }
 }
