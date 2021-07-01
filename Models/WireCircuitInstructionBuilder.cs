@@ -10,21 +10,21 @@ namespace AOC2015.Models
         {
             string[] instructionParts = instructionText.Split();
 
-            WireCircuitOperator instructionOperator = WireCircuitOperator.UNDEFINED;
+            WireCircuitOperator expressionOperator = WireCircuitOperator.UNDEFINED;
             string assignedWireId = null;
             string operand1;
             string operand2 = null;
 
             if (instructionParts[0] == "NOT")
             {
-                instructionOperator = WireCircuitOperator.NOT;
+                expressionOperator = WireCircuitOperator.NOT;
                 operand1 = instructionParts[1];
-                operand2 = instructionParts[3];
+                assignedWireId = instructionParts[3];
             }
 
             else if (instructionParts.Length == 3) // Simple assignement instruction in the form : a -> b
             {
-                instructionOperator = WireCircuitOperator.ASSIGNMENT;
+                expressionOperator = WireCircuitOperator.ASSIGNMENT;
                 operand1 = instructionParts[0];
                 assignedWireId = instructionParts[2];
             }
@@ -34,16 +34,16 @@ namespace AOC2015.Models
                 switch (instructionParts[1])
                 {
                     case "AND":
-                        instructionOperator = WireCircuitOperator.AND;
+                        expressionOperator = WireCircuitOperator.AND;
                         break;
                     case "OR":
-                        instructionOperator = WireCircuitOperator.OR;
+                        expressionOperator = WireCircuitOperator.OR;
                         break;
                     case "LSHIFT":
-                        instructionOperator = WireCircuitOperator.LSHIFT;
+                        expressionOperator = WireCircuitOperator.LSHIFT;
                         break;
                     case "RSHIFT":
-                        instructionOperator = WireCircuitOperator.RSHIFT;
+                        expressionOperator = WireCircuitOperator.RSHIFT;
                         break;
                     default:
                         break;
@@ -54,13 +54,16 @@ namespace AOC2015.Models
                 assignedWireId = instructionParts[4];
             }
 
-
             var instruction = new WireCircuitInstruction();
-
-            instruction.Operator = instructionOperator;
-            instruction.Operand1 = operand1;
-            instruction.Operand2 = operand2;
             instruction.AssignedWireId = assignedWireId;
+
+            instruction.Expression = new WireCircuitExpression
+            {
+                Operator = expressionOperator,
+                Operand1 = operand1,
+                Operand2 = operand2
+            };
+
 
             return instruction;
 
