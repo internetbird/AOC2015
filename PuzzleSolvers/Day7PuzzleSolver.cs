@@ -10,7 +10,7 @@ namespace AOC2015.PuzzleSolvers
     {
         public string SolvePuzzlePart1()
         {
-            Dictionary<string, WireCircuitExpression> instructions = GetWireCircuitInstructionInput();
+            Dictionary<string, WireCircuitExpression> instructions = GetWireCircuitInstructionInput("day7.txt");
 
             var wireCircuit = new WireCircuit(instructions);
 
@@ -19,14 +19,18 @@ namespace AOC2015.PuzzleSolvers
 
         public string SolvePuzzlePart2()
         {
-            throw new NotImplementedException();
+            Dictionary<string, WireCircuitExpression> instructions = GetWireCircuitInstructionInput("day7.2.txt");
+
+            var wireCircuit = new WireCircuit(instructions);
+
+            return wireCircuit.EvaulateWireSignal("a").ToString();
         }
 
-        private Dictionary<string, WireCircuitExpression>  GetWireCircuitInstructionInput()
+        private Dictionary<string, WireCircuitExpression>  GetWireCircuitInstructionInput(string fileName)
         {
             var instructions = new Dictionary<string, WireCircuitExpression>();
 
-            var fullInputFilePath = Path.GetFullPath("InputFiles/day7.txt");
+            var fullInputFilePath = Path.GetFullPath($"InputFiles/{fileName}");
             string[] inputStrings = File.ReadAllLines(fullInputFilePath);
 
             for (int i = 0; i < inputStrings.Length; i++)
