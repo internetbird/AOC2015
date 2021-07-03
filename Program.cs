@@ -10,9 +10,9 @@ namespace AOC2015
         static void Main(string[] args)
         {
 
-            IPuzzleSolver solver = new Day7PuzzleSolver();
+            IPuzzleSolver solver = new Day8PuzzleSolver();
 
-            var solution = solver.SolvePuzzlePart2();
+            var solution = solver.SolvePuzzlePart1();
 
             Console.WriteLine($"The solution to the puzzle is: {solution}");
 
