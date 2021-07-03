@@ -29,7 +29,34 @@ namespace AOC2015.PuzzleSolvers
 
         public string SolvePuzzlePart2()
         {
-            throw new NotImplementedException();
+            string[] inputLines = InputFilesHelper.GetInputFileLines("day8.txt");
+
+            int totalCodeChars = 0, totalEncodedChars = 0;
+
+            foreach (var input in inputLines)
+            {
+                totalCodeChars += input.Length;
+
+                int encodedInputLength = 0;
+
+                for (int i = 0; i < input.Length; i++)
+                {
+                   if (input[i] == '"' || input[i] == '\\')
+                    {
+                        encodedInputLength += 2;
+
+                    } else
+                    {
+                        encodedInputLength++;
+                    }
+                }
+
+                encodedInputLength += 2; //Add the double quotes at the beginning and the end
+
+                totalEncodedChars += encodedInputLength;
+            }
+
+            return (totalEncodedChars - totalCodeChars).ToString();
         }
 
     }
