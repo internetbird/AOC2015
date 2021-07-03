@@ -38,6 +38,29 @@ namespace AOC2015.Models
             return shortestDistance;
         }
 
+
+        public int CalculateLongestRoute()
+        {
+            var permutationGenerator = new PermutationGenerator();
+
+            List<string[]> allPossibleRoutes = permutationGenerator.ListAllPermutations(_citiesToVist);
+
+            int longestDistance = 0;
+
+            foreach (string[] route in allPossibleRoutes)
+            {
+                int routeDistance = CalculateRouteDistance(route);
+
+                if (routeDistance > longestDistance)
+                {
+                    longestDistance = routeDistance;
+                }
+            }
+
+           return longestDistance;
+
+        }
+
         private int CalculateRouteDistance(string[] route)
         {
             int routeDistance = 0;

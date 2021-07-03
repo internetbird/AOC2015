@@ -22,7 +22,13 @@ namespace AOC2015.PuzzleSolvers
 
         public string SolvePuzzlePart2()
         {
-            throw new NotImplementedException();
+            Dictionary<string, int> distancesDictionary = GetInputDistancesDictionary();
+
+            var calculator = new SantaRouteCalculator(distancesDictionary);
+
+            int longestRoute = calculator.CalculateLongestRoute();
+
+            return longestRoute.ToString();
         }
 
         private Dictionary<string, int> GetInputDistancesDictionary()
