@@ -15,5 +15,15 @@ namespace AOC2015.Utility
             return inputStrings;
 
         }
+
+
+        public static string GetInputFileText(string fileName)
+        {
+            var fullInputFilePath = Path.GetFullPath($"InputFiles/{fileName}");
+            string inputText = File.ReadAllText(fullInputFilePath);
+
+            return inputText;
+
+        }
     }
 }
