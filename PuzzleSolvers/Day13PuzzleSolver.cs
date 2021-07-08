@@ -12,6 +12,21 @@ namespace AOC2015.PuzzleSolvers
         {
 
             var familyMembers = new string[] { "Alice", "Bob", "Carol", "David", "Eric", "Frank", "George", "Mallory" };
+            string solution = SolveForFamilyMembers(familyMembers);
+            return solution;
+           
+        }
+
+        public string SolvePuzzlePart2()
+        {
+            var familyMembers = new string[] { "MySelf", "Alice", "Bob", "Carol", "David", "Eric", "Frank", "George", "Mallory" };
+            string solution = SolveForFamilyMembers(familyMembers);
+            return solution;
+        }
+
+
+        private string SolveForFamilyMembers(string[] familyMembers)
+        {
             var inputLines = InputFilesHelper.GetInputFileLines("day13.txt");
 
             var calculator = new FamilyFeastHappinessCalculator(familyMembers, inputLines);
@@ -30,11 +45,6 @@ namespace AOC2015.PuzzleSolvers
             }
 
             return maxTotalHappiness.ToString();
-        }
-
-        public string SolvePuzzlePart2()
-        {
-            throw new NotImplementedException();
         }
     }
 }

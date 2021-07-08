@@ -34,10 +34,17 @@ namespace AOC2015.Models
                 Tuple<string, string> memberNeighbours = GetNeighboursForIndex(seatingOrder, i);
 
                 string currMember = seatingOrder[i];
-                int happinessForNeighbour1 = _happinessChangeData[currMember][memberNeighbours.Item1];
-                int happinessForNeighbour2 = _happinessChangeData[currMember][memberNeighbours.Item2];
 
-                totalHappiness += (happinessForNeighbour1 + happinessForNeighbour2);
+                if (_happinessChangeData.ContainsKey(currMember))
+                {
+                    int happinessForNeighbour1 = _happinessChangeData[currMember].ContainsKey(memberNeighbours.Item1) ?
+                          _happinessChangeData[currMember][memberNeighbours.Item1] : 0;
+
+                    int happinessForNeighbour2 = _happinessChangeData[currMember].ContainsKey(memberNeighbours.Item2) ?
+                        _happinessChangeData[currMember][memberNeighbours.Item2] : 0;
+
+                    totalHappiness += (happinessForNeighbour1 + happinessForNeighbour2);
+                }
             }
 
             return totalHappiness;
