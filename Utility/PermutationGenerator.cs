@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AOC2015.Utility
@@ -33,6 +34,24 @@ namespace AOC2015.Utility
             }
 
             return permutations;
+        }
+
+        public List<string[]> ListAllCircularPermutations(string[] input)
+        {
+            if (input.Length < 2)
+            {
+                return new List<string[]> { input };
+            }
+
+            var firstItem = input[0];
+
+            var arrayWithoutFirstItem = input.SubArray(1, input.Length - 1);
+
+            List<string[]> permutationsWithoutFirstItem = ListAllPermutations(arrayWithoutFirstItem);
+
+            return permutationsWithoutFirstItem
+                .Select(permutation => permutation.PrependItem(firstItem))
+                .ToList();
         }
 
     }
