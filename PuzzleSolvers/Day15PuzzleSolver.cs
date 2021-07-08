@@ -32,7 +32,7 @@ namespace AOC2015.PuzzleSolvers
             int totalDurability = 0;
             int totalFlavor = 0;
             int totalTexture = 0;
-
+           
             foreach (KeyValuePair<Ingredient, int> ingredientDetails in recepie.Contents)
             {
                 totalCapacity += ingredientDetails.Key.Capacity * ingredientDetails.Value;
@@ -42,6 +42,31 @@ namespace AOC2015.PuzzleSolvers
             }
 
             if (totalCapacity <= 0 || totalDurability <= 0 || totalFlavor <= 0 || totalTexture <= 0)
+            {
+                return 0;
+            }
+
+            return totalCapacity * totalDurability * totalFlavor * totalTexture;
+        }
+
+        private int CalculateRecepieScoreWithCalories(Recepie recepie)
+        {
+            int totalCapacity = 0;
+            int totalDurability = 0;
+            int totalFlavor = 0;
+            int totalTexture = 0;
+            int totalCalories = 0;
+
+            foreach (KeyValuePair<Ingredient, int> ingredientDetails in recepie.Contents)
+            {
+                totalCapacity += ingredientDetails.Key.Capacity * ingredientDetails.Value;
+                totalDurability += ingredientDetails.Key.Durability * ingredientDetails.Value;
+                totalFlavor += ingredientDetails.Key.Flavor * ingredientDetails.Value;
+                totalTexture += ingredientDetails.Key.Texture * ingredientDetails.Value;
+                totalCalories += ingredientDetails.Key.Calories * ingredientDetails.Value;
+            }
+
+            if (totalCapacity <= 0 || totalDurability <= 0 || totalFlavor <= 0 || totalTexture <= 0 || totalCalories != 500)
             {
                 return 0;
             }
@@ -93,7 +118,21 @@ namespace AOC2015.PuzzleSolvers
 
         public string SolvePuzzlePart2()
         {
-            throw new NotImplementedException();
+            List<Ingredient> ingredients = GetIngrediends();
+
+            List<Recepie> allPossibleRecepies = GetAllPossibleRecepies(ingredients);
+
+            int highestRecepieScore = 0;
+            foreach (Recepie recepie in allPossibleRecepies)
+            {
+                int recepieScore = CalculateRecepieScoreWithCalories(recepie);
+                if (recepieScore > highestRecepieScore)
+                {
+                    highestRecepieScore = recepieScore;
+                }
+            }
+
+            return highestRecepieScore.ToString();
         }
 
         private List<Ingredient> GetIngrediends()
