@@ -12,6 +12,10 @@ namespace AOC2015.Logic.Calculators
         {
             int totalDistanceTravelled = 0;
 
+            //Reset the reindeer values for a case where multiple calculations are done on the same instance
+            reindeer.State = ReindeerState.Flying;
+            reindeer.TimeInCurrentState = 0;
+
             for (int currSecond = 0; currSecond < numOfSecondsElapsed; currSecond++)
             {
                 if (reindeer.State == ReindeerState.Flying)
