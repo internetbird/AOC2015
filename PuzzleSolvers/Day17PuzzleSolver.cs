@@ -11,20 +11,32 @@ namespace AOC2015.PuzzleSolvers
     {
         public string SolvePuzzlePart1()
         {
-            string[] inputLines = InputFilesHelper.GetInputFileLines("day17.txt");
-            List<int> containerSizes = inputLines
-                                            .Select(line => int.Parse(line))
-                                            .ToList();
+            List<int> containers = GetContainers();
 
-            var calculator = new ContainerCombinationsContainer();
-            int numOfCombinations = calculator.CalculateNumOfCombinationsFor(containerSizes, 150);
+            var calculator = new ContainerCombinationsCalculator();
+            int numOfCombinations = calculator.CalculateNumOfCombinationsFor(containers, 150);
+
+            return numOfCombinations.ToString();
+        }
+      
+        public string SolvePuzzlePart2()
+        {
+            List<int> containers = GetContainers();
+
+            var calculator = new ContainerCombinationsCalculator();
+            int numOfCombinations = calculator.CalculateNumOfMinSizeContainerCombinationsFor(containers, 150);
 
             return numOfCombinations.ToString();
         }
 
-        public string SolvePuzzlePart2()
+        private static List<int> GetContainers()
         {
-            throw new NotImplementedException();
+            string[] inputLines = InputFilesHelper.GetInputFileLines("day17.txt");
+            List<int> containerSizes = inputLines
+                                            .Select(line => int.Parse(line))
+                                            .ToList();
+            return containerSizes;
         }
+
     }
 }
