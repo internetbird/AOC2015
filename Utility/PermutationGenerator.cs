@@ -7,6 +7,9 @@ namespace AOC2015.Utility
 {
     public class PermutationGenerator
     {
+
+       
+
         public List<string[]> ListAllPermutations(string[] input)
         {
             var permutations = new List<string[]>();
