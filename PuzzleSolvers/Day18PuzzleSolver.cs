@@ -11,10 +11,7 @@ namespace AOC2015.PuzzleSolvers
     {
         public string SolvePuzzlePart1()
         {
-            string[] inputLines = InputFilesHelper.GetInputFileLines("day18.txt");
-
-            var builder = new LightAutomataStateBuilder();
-            bool[,] intiialState = builder.BuildState(inputLines);
+            bool[,] intiialState = GetInputInitialState("day18.txt");
 
             var automata = new LightsAutomata(intiialState);
 
@@ -27,9 +24,30 @@ namespace AOC2015.PuzzleSolvers
             return numOfLightsThatAreOn.ToString();
         }
 
+      
+
         public string SolvePuzzlePart2()
         {
-            throw new NotImplementedException();
+            bool[,] intiialState = GetInputInitialState("day18_2.txt");
+
+            var automata = new LightsAutomata(intiialState);
+
+            for (int i = 0; i < 100; i++) //Move the next state 100 times
+            {
+                automata.SwitchToNextStateWithStuckLights();
+            }
+
+            int numOfLightsThatAreOn = automata.GetNumOfLightsThatAreOn();
+            return numOfLightsThatAreOn.ToString();
+        }
+
+        private static bool[,] GetInputInitialState(string fileName)
+        {
+            string[] inputLines = InputFilesHelper.GetInputFileLines(fileName);
+
+            var builder = new LightAutomataStateBuilder();
+            bool[,] intiialState = builder.BuildState(inputLines);
+            return intiialState;
         }
     }
 }
