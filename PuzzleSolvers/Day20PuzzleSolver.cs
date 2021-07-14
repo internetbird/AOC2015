@@ -7,15 +7,16 @@ namespace AOC2015.PuzzleSolvers
 {
     public class Day20PuzzleSolver : IPuzzleSolver
     {
+        private const int PuzzleInput = 36000000;
+
         public string SolvePuzzlePart1()
         {
-            int puzzleInput = 36000000;
             int solutionHouseNum = 0;
             int numOfPresents = 0;
 
             var calculator = new ElfHousePresentsCalculator();
 
-            while(numOfPresents < puzzleInput)
+            while(numOfPresents < PuzzleInput)
             {
                 solutionHouseNum += 2;
                 numOfPresents= calculator.CalculateNumOfPresentsForHouse(solutionHouseNum);
@@ -31,7 +32,23 @@ namespace AOC2015.PuzzleSolvers
 
         public string SolvePuzzlePart2()
         {
-            throw new NotImplementedException();
+            int solutionHouseNum = 0;
+            int numOfPresents = 0;
+
+            var calculator = new ElfHousePresentsCalculator();
+
+            while (numOfPresents < PuzzleInput)
+            {
+                solutionHouseNum++;
+                numOfPresents = calculator.CalculateNumOfPresentsForHouseWith50Limit(solutionHouseNum);
+
+                if (solutionHouseNum % 10000 == 0)
+                {
+                    Console.WriteLine($"House #{solutionHouseNum} get {numOfPresents} presents");
+                }
+            }
+
+            return solutionHouseNum.ToString(); ;
         }
     }
 }
