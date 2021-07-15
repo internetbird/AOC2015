@@ -63,16 +63,12 @@ namespace AOC2015.Logic.Builders
             //two rings
             foreach (RPGRing ring in availableRings)
             {
-                var twoRings = new List<RPGRing>();
-
-                twoRings.Add(ring);
-
                 var leftOverRings = new List<RPGRing>(availableRings);
                 leftOverRings.Remove(ring);
 
                 foreach (RPGRing leftOverRing in leftOverRings)
                 {
-                    twoRings.Add(leftOverRing);
+                    var twoRings = new List<RPGRing> { ring, leftOverRing };
                     ringCombinations.Add(twoRings);
                 }
             }

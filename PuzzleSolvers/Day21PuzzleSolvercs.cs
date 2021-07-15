@@ -2,6 +2,7 @@
 using AOC2015.Logic.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AOC2015.PuzzleSolvers
@@ -40,7 +41,31 @@ namespace AOC2015.PuzzleSolvers
 
         public string SolvePuzzlePart2()
         {
-            throw new NotImplementedException();
+            int maxAmoutToLose = 0;
+
+            var builder = new RPGEquipmentBuilder();
+            List<RPGEquipment> allEquipmentCombinations = builder.BuildAllPossibleStoreEquipmentCombinations(new RPGGameStore());
+            foreach (RPGEquipment equipment in allEquipmentCombinations)
+            {
+                int equipmentTotalCost = equipment.GetTotalCost();
+
+                if (equipmentTotalCost > maxAmoutToLose)
+                {
+                    RPGPlayer me = new RPGPlayer(100, equipment);
+                    RPGPlayer boss = new RPGStaticPlayer(104, 8, 1);
+
+                    var game = new RPGGame(me, boss);
+
+                    RPGPlayer winner = game.PlayGame();
+                    if (winner == boss)
+                    {
+                        maxAmoutToLose = equipmentTotalCost;
+                        Console.WriteLine($"I was able to lose for: {maxAmoutToLose}");
+                    }
+                }
+            }
+
+            return maxAmoutToLose.ToString();
         }
 
     }
