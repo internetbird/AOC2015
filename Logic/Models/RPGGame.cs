@@ -42,8 +42,8 @@ namespace AOC2015.Logic.Models
 
         private void PlaySingleGameTurn()
         {
-            int attackerDamage = _currAttacker.GetPlayerDamageScore();
-            int defenderArmor = _currDefender.GetPlayerArmorScore();
+            int attackerDamage = _currAttacker.GetPlayerDamage();
+            int defenderArmor = _currDefender.GetPlayerArmor();
 
             int currAttackDamage = Math.Max((attackerDamage - defenderArmor), 1);
 

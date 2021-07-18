@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AOC2015.Logic.Models
 {
-    public class RPGPlayer
+    public class RPGPlayer : RPGPlayerBase
     {
         public RPGEquipment Equipement { get; private set; }
         public int HitPoints { get; private set; }
@@ -15,7 +15,7 @@ namespace AOC2015.Logic.Models
             Equipement = equipment;
         }
 
-        public virtual int GetPlayerDamageScore()
+        public override int GetPlayerDamage()
         {
 
             if (Equipement.Weapon == null)
@@ -42,7 +42,7 @@ namespace AOC2015.Logic.Models
             HitPoints -= currAttackDamage;
         }
 
-        public virtual int GetPlayerArmorScore()
+        public override int GetPlayerArmor()
         {
             int armorScore = 0;
 

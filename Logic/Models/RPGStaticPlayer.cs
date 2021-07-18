@@ -15,12 +15,12 @@ namespace AOC2015.Logic.Models
             _armorScore = armorScore;
         }
   
-        public override int GetPlayerArmorScore()
+        public override int GetPlayerArmor()
         {
             return _armorScore;
         }
 
-        public override int GetPlayerDamageScore()
+        public override int GetPlayerDamage()
         {
             return _damageScore;
         }

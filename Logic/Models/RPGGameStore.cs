@@ -45,5 +45,20 @@ namespace AOC2015.Logic.Models
 
             return rings;
         }
+
+
+        public List<RPGSpell> GetAvailableSpells()
+        {
+            var spells = new List<RPGSpell>
+            {
+                new RPGSpell("Magic Missle", 53, 0, 4, 0, 0, 1),
+                new RPGSpell("Drain", 73, 2, 2, 0, 0, 1),
+                new RPGSpell("Shield", 113, 0, 0, 7, 0, 6),
+                new RPGSpell("Poison", 173, 0, 3, 0, 0, 6),
+                new RPGSpell("Recharge", 229, 0, 0, 0, 101, 5),
+            };
+
+            return spells;
+        }
     }
 }
