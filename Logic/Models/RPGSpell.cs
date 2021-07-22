@@ -13,6 +13,7 @@ namespace AOC2015.Logic.Models
         public int Armor { get; private set; }
         public int ManaRecharge { get; private set; }
         public int LastsForTurns { get; private set; }
+        public bool IsEffect => LastsForTurns > 1;
 
         public RPGSpell(string name, int manaCost, int heal, int damange, int armor, int manaRecharge, int numOfTurns)
         {

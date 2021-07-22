@@ -4,14 +4,8 @@ using System.Text;
 
 namespace AOC2015.Logic.Models
 {
-    public class RPGGame
+    public class RPGGame : RPGGameBase<RPGPlayer, RPGPlayer>
     {
-        private RPGPlayer _player1;
-        private RPGPlayer _player2;
-
-        private RPGPlayer _currAttacker;
-        private RPGPlayer _currDefender => (_currAttacker == _player1) ? _player2 : _player1;
-
 
         public RPGGame(RPGPlayer player1, RPGPlayer player2)
         {
@@ -52,16 +46,6 @@ namespace AOC2015.Logic.Models
             SwitchPlayersRole();
         }
 
-        private void SwitchPlayersRole()
-        {
-            if (_currAttacker == _player1)
-            {
-                _currAttacker = _player2;
-
-            } else
-            {
-                _currAttacker = _player1;
-            }
-        }
+      
     }
 }

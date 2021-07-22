@@ -7,8 +7,7 @@ namespace AOC2015.Logic.Models
     public class RPGPlayer : RPGPlayerBase
     {
         public RPGEquipment Equipement { get; private set; }
-        public int HitPoints { get; private set; }
-
+       
         public RPGPlayer(int initalHitPoints, RPGEquipment equipment)
         {
             HitPoints = initalHitPoints;
@@ -37,10 +36,7 @@ namespace AOC2015.Logic.Models
             return damageScore;
         }
 
-        public void DealDamage(int currAttackDamage)
-        {
-            HitPoints -= currAttackDamage;
-        }
+     
 
         public override int GetPlayerArmor()
         {
