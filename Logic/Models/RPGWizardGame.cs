@@ -11,8 +11,9 @@ namespace AOC2015.Logic.Models
         private RPGGameStore _store;
         private readonly int MinPlayerMana;
         private readonly List<RPGSpell> _availableStoreSpells;
+        private bool _debugMode;
 
-        public RPGWizardGame(RPGWizardPlayer player1, RPGStaticPlayer player2) 
+        public RPGWizardGame(RPGWizardPlayer player1, RPGStaticPlayer player2, bool debugMode = false) 
         {
             _player1 = player1;
             _player2 = player2;
@@ -21,6 +22,7 @@ namespace AOC2015.Logic.Models
 
             MinPlayerMana = _store.GetAvailableSpells().Min(spell => spell.ManaCost);
             _availableStoreSpells = _store.GetAvailableSpells();
+            _debugMode = debugMode;
         }
 
 
@@ -43,10 +45,31 @@ namespace AOC2015.Logic.Models
         private void PlaySingleGameTurn()
         {
 
+            if (_debugMode)
+            {
+                if (_currAttacker == _player1)
+                {
+                    Console.WriteLine("-- Player turn --");
+                }
+                else
+                {
+                    Console.WriteLine("-- Boss  turn --");
+                }
+
+                Console.WriteLine($"- Player has {_player1.HitPoints} hit points, {_player1.GetPlayerArmor()} armor, {_player1.Mana} mana");
+                Console.WriteLine($"- Boss has {_player2.HitPoints} hit points");
+
+            }
+
+
             if (_currAttacker is RPGWizardPlayer)
             {
-                ((RPGWizardPlayer)_currAttacker).PlayMyTurn();
-            } 
+                _player1.StartTurn();
+
+            } else //Boss turn
+            {
+                _player1.StartTurn(_player2);
+            }
 
             int attackerDamage = _currAttacker.GetPlayerDamage();
             int defenderArmor = _currDefender.GetPlayerArmor();
@@ -55,6 +78,18 @@ namespace AOC2015.Logic.Models
             {
                 int currAttackDamage = Math.Max((attackerDamage - defenderArmor), 1);
                 _currDefender.DealDamage(currAttackDamage);
+
+                if (_debugMode)
+                {
+                    if (_currAttacker == _player1)
+                    {
+                        Console.WriteLine($"Player deals {currAttackDamage} to the boss");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Boss deals {currAttackDamage} to the player");
+                    }
+                }
             }
 
             if (_currAttacker is RPGWizardPlayer)
