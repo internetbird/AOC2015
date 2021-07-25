@@ -18,11 +18,15 @@ namespace AOC2015.PuzzleSolvers
 
             while (numOfManaSpentRecords < 10)
             {
-                var player = new RPGWizardPlayer(50, 500);
+                var player = new RPGWizardPlayer(50, 500, new RPGGameStore().GetAvailableSpells());
                 var boss = new RPGStaticPlayer(71, 10, 0);
+
+                /*   var player = new RPGWizardPlayer(10, 250, new RPGGameStore().GetAvailableSpells());
+                   var boss = new RPGStaticPlayer(14, 8, 0);*/
+
                 var game = new RPGWizardGame(player, boss);
 
-                if (gameNum % 100000 == 0)
+                if (gameNum % 1000000 == 0)
                 {
                     Console.WriteLine($"Starting Game #{gameNum}");
                 }
@@ -46,7 +50,7 @@ namespace AOC2015.PuzzleSolvers
                         Console.WriteLine($"New boss min hit points : {minBossHitPoints}");
                     }
 
-                    if (gameNum % 100000 == 0)
+                    if (gameNum % 1000000 == 0)
                     {
                         Console.WriteLine($"I Lost!  My Hit Points : {player.HitPoints}, My Mana: {player.Mana}, Boss Hit Points: {boss.HitPoints}");
                     }

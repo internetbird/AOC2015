@@ -17,12 +17,12 @@ namespace AOC2015.Logic.Models
   
         public override int GetPlayerArmor()
         {
-            return _armorScore;
+            return HitPoints > 0 ? _armorScore : 0;
         }
 
         public override int GetPlayerDamage()
         {
-            return _damageScore;
+            return HitPoints > 0 ? _damageScore : 0;
         }
     }
 }

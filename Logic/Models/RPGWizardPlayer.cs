@@ -15,14 +15,17 @@ namespace AOC2015.Logic.Models
         private int _instantArmor;
         private int _mana;
         private int _totalManaSpent;
+        private RPGSpell _lastChoosenSpellToCast;
+        private readonly List<RPGSpell> _availableSpells;
 
-        public RPGWizardPlayer(int initialHitPoints, int initalMana)
+        public RPGWizardPlayer(int initialHitPoints, int initalMana, List<RPGSpell> availableSpells)
         {
             HitPoints = initialHitPoints;
             _mana = initalMana;
             _totalManaSpent = 0;
 
             _activeEffects = new List<RPGEffect>();
+            _availableSpells = availableSpells;
         }
 
         public override int GetPlayerDamage()
@@ -37,38 +40,96 @@ namespace AOC2015.Logic.Models
             return _instantArmor + effectsArmor;
         }
 
-        public void PlayMyTurn(List<RPGSpell> availableSpells)
+        public void PlayMyTurn()
         {
-            UpdateActiveEffects();
+          
+            _lastChoosenSpellToCast = ChooseSpellToCast();
 
-            RPGSpell choosenSpellToCast = ChooseSpellToCast(availableSpells);
+            if (!_lastChoosenSpellToCast.IsEffect)
+            {
+                _instantDamage = _lastChoosenSpellToCast.Damange;
+                _instantArmor = _lastChoosenSpellToCast.Armor;
+            }
 
-            if (choosenSpellToCast.IsEffect) 
+          
+            HitPoints += _lastChoosenSpellToCast.Heal;
+            _mana -= _lastChoosenSpellToCast.ManaCost;
+            _totalManaSpent += _lastChoosenSpellToCast.ManaCost;
+           
+        }
+
+        public void CompleteTurn(RPGPlayerBase currAttacker = null) {
+
+            UseActiveEffects(currAttacker);
+
+            _activeEffects.ForEach(effect => effect.Timer--);
+            //Remove elapsed effects 
+            _activeEffects = _activeEffects.Where(effect => effect.Timer > 0).ToList();
+          
+            if (_lastChoosenSpellToCast != null &&  _lastChoosenSpellToCast.IsEffect)
             {
                 _activeEffects.Add(new RPGEffect
                 {
-                    Name = choosenSpellToCast.Name,
-                    Armor = choosenSpellToCast.Armor,
-                    Timer = choosenSpellToCast.LastsForTurns,
-                    Damange = choosenSpellToCast.Damange,
-                    Mana = choosenSpellToCast.ManaRecharge,
-                    IsFirstTurn = true
+                    Name = _lastChoosenSpellToCast.Name,
+                    Armor = _lastChoosenSpellToCast.Armor,
+                    Timer = _lastChoosenSpellToCast.LastsForTurns,
+                    Damange = _lastChoosenSpellToCast.Damange,
+                    Mana = _lastChoosenSpellToCast.ManaRecharge,
                 });
 
-                _instantArmor = 0;
-                _instantDamage = 0;
-            }
-            else //not an effect
-            {
-                _instantArmor = choosenSpellToCast.Armor;
-                _instantDamage = choosenSpellToCast.Damange;
             }
 
-            _mana -= choosenSpellToCast.ManaCost;
-            _totalManaSpent += choosenSpellToCast.ManaCost;
+            _lastChoosenSpellToCast = null;
+            _instantArmor = 0;
+            _instantDamage = 0;
         }
 
-        private RPGSpell ChooseSpellToCast(List<RPGSpell> availableSpells)
+        private RPGSpell ChooseSpellToCast()
+        {
+            RPGSpell choosenSpellToCast;
+
+          /*  if (_mana < 500)
+            {
+                choosenSpellToCast = ChooseSpellToCastPreferEffects(availableSpells);
+            }
+            else
+            {
+                choosenSpellToCast = ChooseSpellToCastLowestMana(availableSpells);
+            }*/
+
+            //RPGSpell choosenSpellToCast = ChooseSpellToCastPreferEffects(availableSpells);
+            choosenSpellToCast = ChooseSpellToCastRandomly();
+            //RPGSpell choosenSpellToCast = ChooseSpellToCastLowestMana(availableSpells);
+
+            return choosenSpellToCast;
+        }
+
+        private RPGSpell ChooseSpellToCastLowestMana(List<RPGSpell> availableSpells)
+        {
+            List<RPGSpell> validSpellsToChooseFrom = availableSpells
+                                    .Where(spell => !_activeEffects.Exists(effect => effect.Name == spell.Name) && _mana > spell.ManaCost)
+                                    .OrderBy(spell => spell.ManaCost)
+                                    .ToList();
+         
+            RPGSpell choosenSpellToCast = validSpellsToChooseFrom.First();
+
+            return choosenSpellToCast;
+        }
+
+
+        private RPGSpell ChooseSpellToCastRandomly()
+        {
+            List<RPGSpell> validSpellsToChooseFrom = _availableSpells
+                                    .Where(spell => !_activeEffects.Exists(effect => effect.Name == spell.Name) && _mana > spell.ManaCost)
+                                    .ToList();
+
+            var randomSpellIndex = new Random(DateTime.Now.Millisecond).Next(0, validSpellsToChooseFrom.Count);
+            RPGSpell choosenSpellToCast = validSpellsToChooseFrom[randomSpellIndex];
+
+            return choosenSpellToCast;
+        }
+
+        private RPGSpell ChooseSpellToCastPreferEffects(List<RPGSpell> availableSpells)
         {
             //Always prefer effects 
             List<RPGSpell> validEffectsToChooseFrom = availableSpells
@@ -77,18 +138,19 @@ namespace AOC2015.Logic.Models
             .ToList();
 
             //Recharge logic
-        /*    RPGSpell rechargeEffect = validEffectsToChooseFrom.FirstOrDefault(effect => effect.Name == "Recharge");
+            RPGSpell rechargeEffect = validEffectsToChooseFrom.FirstOrDefault(effect => effect.Name == "Recharge");
             if (rechargeEffect != null)
             {
-                if (Mana < 350)
-                {
+              /*  if (Mana < 400)
+                {*/
                     return rechargeEffect;
 
-                } else
+              /*  }
+                else
                 {
                     validEffectsToChooseFrom.Remove(rechargeEffect);
-                }
-            }*/
+                }*/
+            }
 
             if (validEffectsToChooseFrom.Count > 0)
             {
@@ -111,41 +173,42 @@ namespace AOC2015.Logic.Models
             }
         }
 
-        public void PlayOpponentTurn(RPGPlayerBase _currAttacker)
-        {
-            UpdateActiveEffects();
-
-            //Deal effect damage
-            int effectsDamage = GetTotalEffectsDamage();
-            _currAttacker.DealDamage(effectsDamage);
-        }
-
         public int Mana => _mana;
         public int TotalManaSpent => _totalManaSpent;
 
-        private void UpdateActiveEffects()
+        private void UseActiveEffects(RPGPlayerBase currAttacker = null)
         {
-            var rechargeManageEffect = _activeEffects.FirstOrDefault(effect => effect.Mana > 0);
-            if (rechargeManageEffect != null)
+            //Update mana if it was not choosen in the current turn
+            RPGEffect rechargeEffect = GetRechargeEffect();
+            if (rechargeEffect != null)
             {
-                _mana += rechargeManageEffect.Mana;
+                _mana += rechargeEffect.Mana;
             }
-            _activeEffects.ForEach(effect => effect.Timer--);
-            _activeEffects.ForEach(effect => effect.IsFirstTurn = false);
 
-            //Remove elapsed effects 
-            _activeEffects = _activeEffects.Where(effect => effect.Timer > 0).ToList();
+            if (currAttacker != null)
+            {
+                //Deal effect damage
+                int effectsDamage = GetTotalEffectsDamage();
+                currAttacker.DealDamage(effectsDamage);
+            }
+
+        }
+
+        private RPGEffect GetRechargeEffect()
+        {
+            return _activeEffects.FirstOrDefault(effect => effect.Name == "Recharge");
         }
 
         private int GetTotalEffectsDamage()
         {
-            return _activeEffects.Where(effect => !effect.IsFirstTurn)
+            return _activeEffects.Where(effect => _lastChoosenSpellToCast == null 
+                                                ||  effect.Name != _lastChoosenSpellToCast.Name)
                                 .Sum(effect => effect.Damange);
         }
 
         private int GetTotalEffectsArmor()
         {
-            return _activeEffects.Where(effect => !effect.IsFirstTurn)
+            return _activeEffects.Where(effect =>  _lastChoosenSpellToCast == null || effect.Name != _lastChoosenSpellToCast.Name)
                                 .Sum(effect => effect.Armor);
         }
     }

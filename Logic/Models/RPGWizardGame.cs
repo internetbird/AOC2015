@@ -10,6 +10,7 @@ namespace AOC2015.Logic.Models
 
         private RPGGameStore _store;
         private readonly int MinPlayerMana;
+        private readonly List<RPGSpell> _availableStoreSpells;
 
         public RPGWizardGame(RPGWizardPlayer player1, RPGStaticPlayer player2) 
         {
@@ -19,6 +20,7 @@ namespace AOC2015.Logic.Models
             _currAttacker = _player1;
 
             MinPlayerMana = _store.GetAvailableSpells().Min(spell => spell.ManaCost);
+            _availableStoreSpells = _store.GetAvailableSpells();
         }
 
 
@@ -28,7 +30,9 @@ namespace AOC2015.Logic.Models
         /// <returns>The winner of the game</returns>
         public RPGPlayerBase PlayGame()
         {
-            while(_player1.Mana >= MinPlayerMana && _player1.HitPoints > 0 && _player2.HitPoints > 0)
+            while((_player1 == _currDefender || _player1.Mana >= MinPlayerMana) 
+                && _player1.HitPoints > 0 
+                && _player2.HitPoints > 0)
             {
                 PlaySingleGameTurn();
             }
@@ -41,12 +45,8 @@ namespace AOC2015.Logic.Models
 
             if (_currAttacker is RPGWizardPlayer)
             {
-                List<RPGSpell> availableSpells = _store.GetAvailableSpells();
-                ((RPGWizardPlayer)_currAttacker).PlayMyTurn(availableSpells);
-            } else
-            {
-                ((RPGWizardPlayer)_currDefender).PlayOpponentTurn(_currAttacker);
-            }
+                ((RPGWizardPlayer)_currAttacker).PlayMyTurn();
+            } 
 
             int attackerDamage = _currAttacker.GetPlayerDamage();
             int defenderArmor = _currDefender.GetPlayerArmor();
@@ -55,6 +55,15 @@ namespace AOC2015.Logic.Models
             {
                 int currAttackDamage = Math.Max((attackerDamage - defenderArmor), 1);
                 _currDefender.DealDamage(currAttackDamage);
+            }
+
+            if (_currAttacker is RPGWizardPlayer)
+            {
+                _player1.CompleteTurn();
+
+            }  else
+            {
+                _player1.CompleteTurn(_currAttacker);
             }
 
             SwitchPlayersRole();
