@@ -23,7 +23,22 @@ namespace AOC2015.PuzzleSolvers
 
         public string SolvePuzzlePart2()
         {
-            throw new NotImplementedException();
+            string[] programLines = InputFilesHelper.GetInputFileLines("day23.txt");
+
+            var initialRegisters = new Dictionary<string, int>
+                        {
+                            {"a", 1 },
+                            {"b", 0 },
+                        };
+
+
+            var computer = new ChristmasComputer(initialRegisters);
+            computer.LoadProgram(programLines);
+            computer.ExecuteProgram();
+
+            int registerValue = computer.GetRegisterValue("b");
+
+            return registerValue.ToString();
         }
     }
 }

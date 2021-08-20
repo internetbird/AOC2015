@@ -12,13 +12,18 @@ namespace AOC2015.Logic
         private List<ChristmasComputerInstruction> _program;
         private int _currentCommandIndex;
 
-        public ChristmasComputer()
+        public ChristmasComputer(Dictionary<string, int> initialRegisters = null)
         {
-            _registers = new Dictionary<string, int>
+            _registers = initialRegisters;
+
+            if (_registers == null)
             {
-                   {"a", 0 },
-                   {"b", 0 }
-            };
+                _registers = new Dictionary<string, int>
+                        {
+                               {"a", 0 },
+                               {"b", 0 }
+                        };
+            }
 
             _program = new List<ChristmasComputerInstruction>();
             _currentCommandIndex = 0;
@@ -50,13 +55,47 @@ namespace AOC2015.Logic
 
         private void ExecuteInsturction(ChristmasComputerInstruction instructionToExecute)
         {
+            int registerValue;
+
             switch (instructionToExecute.Type)
             {
                 case ChristmasComputerInstructionType.Increment:
                     _registers[instructionToExecute.Operand1]++;
+                    _currentCommandIndex++;
                     break;
+                case ChristmasComputerInstructionType.Half:
+                    _registers[instructionToExecute.Operand1] = _registers[instructionToExecute.Operand1] / 2;
+                    _currentCommandIndex++;
+                    break;
+                case ChristmasComputerInstructionType.Triple:
+                    _registers[instructionToExecute.Operand1] = _registers[instructionToExecute.Operand1] * 3;
+                    _currentCommandIndex++;
+                    break;
+                case ChristmasComputerInstructionType.Jump:
+                    _currentCommandIndex += int.Parse(instructionToExecute.Operand1);
+                    break;
+                case ChristmasComputerInstructionType.JumpIfEven:
+                    registerValue = GetRegisterValue(instructionToExecute.Operand1);
 
+                    if (registerValue % 2 == 0)
+                    {
+                        _currentCommandIndex += int.Parse(instructionToExecute.Operand2);
+                    } else
+                    {
+                        _currentCommandIndex++; 
+                    }
 
+                    break;
+                case ChristmasComputerInstructionType.JumpIfOne:
+                    registerValue = GetRegisterValue(instructionToExecute.Operand1);
+                    if (registerValue == 1)
+                    {
+                        _currentCommandIndex += int.Parse(instructionToExecute.Operand2);
+                    } else
+                    {
+                        _currentCommandIndex++;
+                    }
+                    break;
             }
         }
 
