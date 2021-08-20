@@ -8,95 +8,80 @@ namespace AOC2015.PuzzleSolvers
 {
     public class Day24PuzzleSolver : IPuzzleSolver
     {
+        private int _minNumOfItems = int.MaxValue;
+        private ulong _minMultiplier = ulong.MaxValue;
+
+
         public string SolvePuzzlePart1()
         {
             string[] inputLines = InputFilesHelper.GetInputFileLines("day24.txt");
 
             List<ulong> weights = inputLines.Select(line => ulong.Parse(line)).ToList();
-          
-            bool solutionFound = false;
-            List<ulong> groupA = null, groupB = null, groupC = null;
 
+            int solutionsCounter = 0;
             var random = new Random();
-
             ulong weightForEachGroup = weights.Sum() / 3;
-            
-            while (!solutionFound)
-            {
-                groupA = new List<ulong>();
-                groupB = new List<ulong>();
-                groupC = new List<ulong>();
 
+            while (solutionsCounter < 1000)
+            {
+                var groups = new List<List<ulong>>
+                {
+                     new List<ulong>(),
+                     new List<ulong>(),
+                     new List<ulong>()
+                };
 
                 foreach (ulong weight in weights)
                 {
-                    int randomGroup = random.Next(3);
+                    int randomGroupIndex = random.Next(3);
 
-                    if (randomGroup == 0) //Group A
+                    List<ulong> choosenGroup = groups[randomGroupIndex];
+                  
+                    if (choosenGroup.Sum() + weight <= weightForEachGroup)
                     {
-                        if (groupA.Sum() + weight <= weightForEachGroup)
-                        {
-                            groupA.Add(weight);
-
-                        }
-                        else if (groupB.Sum() + weight <= weightForEachGroup)
-                        {
-                            groupB.Add(weight);
-                        }
-                        else
-                        {
-                            groupC.Add(weight);
-                        }
-
+                        choosenGroup.Add(weight);
 
                     }
-                    else if (randomGroup == 1) //Group B
+                    else if (groups[(randomGroupIndex + 1) % 3].Sum() + weight <= weightForEachGroup)
                     {
-                        if (groupB.Sum() + weight <= weightForEachGroup)
-                        {
-                            groupB.Add(weight);
-
-                        }
-                        else if (groupA.Sum() + weight <= weightForEachGroup)
-                        {
-                            groupA.Add(weight);
-                        }
-                        else
-                        {
-                            groupC.Add(weight);
-                        }
+                        groups[(randomGroupIndex + 1) % 3].Add(weight);
                     }
-                    else //Group C
+                    else
                     {
-                        if (groupC.Sum() + weight <= weightForEachGroup)
-                        {
-                            groupC.Add(weight);
-
-                        }
-                        else if (groupB.Sum() + weight <= weightForEachGroup)
-                        {
-                            groupB.Add(weight);
-                        }
-                        else
-                        {
-                            groupA.Add(weight);
-                        }
+                        groups[(randomGroupIndex + 2) % 3].Add(weight);
                     }
                 }
 
-                if (groupA.Sum() == groupB.Sum() && groupB.Sum() == groupC.Sum())
+                if (groups[0].Sum() ==  groups[1].Sum() && groups[1].Sum() == groups[2].Sum())
                 {
-                    solutionFound = true;
+                    solutionsCounter++;
+
+                    List<ulong> minSizeGroup = GetMinSizeGroup(groups);
+
+                    if (minSizeGroup.Count < _minNumOfItems)
+                    {
+                        _minNumOfItems = minSizeGroup.Count;
+                        _minMultiplier = minSizeGroup.Multiply();
+
+                        Console.WriteLine($"Found new min size group with size : {_minNumOfItems} and QE : {minSizeGroup.Multiply()}");
+
+                    } else if (minSizeGroup.Count == _minNumOfItems &&  minSizeGroup.Multiply() < _minMultiplier)
+                    {
+                        _minMultiplier = minSizeGroup.Multiply();
+                        Console.WriteLine($"Found a new QE min : { minSizeGroup.Multiply()} for group size : {minSizeGroup.Count}");
+                    }
                 }
 
             }
 
-            ulong groupA_QE =  groupA.Multiply();
-            ulong groupB_QE = groupB.Multiply();
-            ulong groupC_QE = groupC.Multiply();
-
-            return groupA.Count().ToString();
+            return _minMultiplier.ToString();
         }
+
+        private List<ulong> GetMinSizeGroup(List<List<ulong>> groups)
+        {
+            return groups.OrderBy(group => group.Count).First();
+        }
+
 
         public string SolvePuzzlePart2()
         {
