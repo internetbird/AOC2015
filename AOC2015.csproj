@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AOC2015.Tests\**" />
+    <EmbeddedResource Remove="AOC2015.Tests\**" />
+    <None Remove="AOC2015.Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
