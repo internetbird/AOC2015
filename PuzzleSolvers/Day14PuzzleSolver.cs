@@ -1,4 +1,5 @@
-﻿using AOC2015.Logic.Calculators;
+﻿using AOC;
+using AOC2015.Logic.Calculators;
 using AOC2015.Models;
 using AOC2015.Utility;
 using System;

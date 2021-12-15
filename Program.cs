@@ -1,4 +1,5 @@
-﻿using AOC2015.PuzzleSolvers;
+﻿using AOC;
+using AOC2015.PuzzleSolvers;
 using System;
 using System.IO;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace AOC2015
     {
         static void Main(string[] args)
         {
-            IPuzzleSolver solver = new Day25PuzzleSolver();
+            IPuzzleSolver solver = new Day12PuzzleSolver();
 
             var solution = solver.SolvePuzzlePart1();
 
