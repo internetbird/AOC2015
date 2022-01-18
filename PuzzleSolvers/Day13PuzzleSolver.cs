@@ -1,6 +1,7 @@
 ﻿using AOC;
 using AOC2015.Models;
 using AOC2015.Utility;
+using BirdLib;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,7 +34,7 @@ namespace AOC2015.PuzzleSolvers
             var calculator = new FamilyFeastHappinessCalculator(familyMembers, inputLines);
 
             var permutationGenerator = new PermutationGenerator();
-            List<string[]> allCircularPermutations = permutationGenerator.ListAllCircularPermutations(familyMembers);
+            List<string[]> allCircularPermutations = permutationGenerator.GetAllCircularPermutations(familyMembers);
             int maxTotalHappiness = 0;
 
             foreach (string[] permutation in allCircularPermutations)

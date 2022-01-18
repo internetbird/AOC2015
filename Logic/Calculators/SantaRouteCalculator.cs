@@ -1,4 +1,5 @@
 ﻿using AOC2015.Utility;
+using BirdLib;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,7 +22,7 @@ namespace AOC2015.Models
         {
             var permutationGenerator = new PermutationGenerator();
 
-            List<string[]> allPossibleRoutes = permutationGenerator.ListAllPermutations(_citiesToVist);
+            List<string[]> allPossibleRoutes = permutationGenerator.GetAllPermutations(_citiesToVist);
 
             int shortestDistance = -1;
 
@@ -43,7 +44,7 @@ namespace AOC2015.Models
         {
             var permutationGenerator = new PermutationGenerator();
 
-            List<string[]> allPossibleRoutes = permutationGenerator.ListAllPermutations(_citiesToVist);
+            List<string[]> allPossibleRoutes = permutationGenerator.GetAllPermutations(_citiesToVist);
 
             int longestDistance = 0;
 
